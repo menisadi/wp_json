@@ -18,6 +18,10 @@ pub fn parse_line(line: String) -> List(String) {
   }
 }
 
+pub fn parse_lines(lines: List(String)) -> List(List(String)) {
+  todo
+}
+
 pub fn print_line(parsed_line) {
   case parsed_line {
     [date, time, name, text] -> {
