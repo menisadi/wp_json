@@ -28,13 +28,12 @@ pub fn parse_lines(
   results: List(List(String)),
 ) -> List(List(String)) {
   case lines {
-    [first, ..rest] ->
-      parse_lines(rest, list.append(results, parse_line(first)))
-    [] -> []
+    [first, ..rest] -> parse_lines(rest, [parse_line(first), ..results])
+    [] -> list.reverse(results)
   }
 }
 
-pub fn print_line(parsed_line) -> String {
+pub fn print_line(parsed_line: List(String)) -> String {
   case parsed_line {
     [date, time, name, text] -> {
       let date_str = "date:" <> date
@@ -47,10 +46,19 @@ pub fn print_line(parsed_line) -> String {
   }
 }
 
+pub fn print_lines(parsed_lines: List(List(String))) -> String {
+  case parsed_lines {
+    [first, ..rest] -> print_line(first) <> "\n" <> print_lines(rest)
+    [] -> "Empty"
+  }
+}
+
 pub fn main() {
   let text: String =
     "6/26/25, 20:12 - Meni Sadigurschi: אפרופו נושא האתר אישי שעלה פה פעם
 6/26/25, 20:13 - Meni Sadigurschi: החלטתי לנסות להעלות פוסטים (לא משהו דרמטי) לאתר שלי <This message was edited>"
 
-  parse_lines(string.split(text, on: "\n"), [])
+  let splitted_text = string.split(text, on: "\n")
+  let parsed = parse_lines(splitted_text, [])
+  io.println(print_lines(parsed))
 }
