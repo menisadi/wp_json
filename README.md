@@ -3,7 +3,10 @@
 [![Package Version](https://img.shields.io/hexpm/v/wp_json)](https://hex.pm/packages/wp_json)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/wp_json/)
 
-A small Gleam library for parsing WhatsApp chat exports into structured data.
+A small Gleam project for learning the language by parsing WhatsApp chat
+exports into structured data.
+**Please note that this project is not
+intended for production use and is primarily a learning exercise.**
 
 ## Usage
 ```sh
