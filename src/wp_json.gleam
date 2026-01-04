@@ -1,18 +1,20 @@
 import gleam/io
 import gleam/list
+import gleam/option.{type Option, None}
 import gleam/string
+import simplifile.{read, write}
 
 pub type Line {
   Line(date: String, time: String, name: String, text: String)
 }
 
 pub fn parse_line(line: String) -> List(String) {
-  case string.split(line, on: ", ") {
-    [date, after_date] -> {
-      case string.split(after_date, on: " - ") {
-        [time, after_time] -> {
-          case string.split(after_time, on: ": ") {
-            [name, text] -> [date, time, name, text]
+  case string.split_once(line, on: ", ") {
+    Ok(#(date, after_date)) -> {
+      case string.split_once(after_date, on: " - ") {
+        Ok(#(time, after_time)) -> {
+          case string.split_once(after_time, on: ": ") {
+            Ok(#(name, text)) -> [date, time, name, text]
             _ -> []
           }
         }
@@ -54,11 +56,17 @@ pub fn print_lines(parsed_lines: List(List(String))) -> String {
 }
 
 pub fn main() {
-  let text: String =
-    "6/26/25, 20:12 - Meni Sadigurschi: אפרופו נושא האתר אישי שעלה פה פעם
-6/26/25, 20:13 - Meni Sadigurschi: החלטתי לנסות להעלות פוסטים (לא משהו דרמטי) לאתר שלי <This message was edited>"
-
-  let splitted_text = string.split(text, on: "\n")
-  let parsed = parse_lines(splitted_text, [])
-  io.println(print_lines(parsed))
+  let file_path = "data/wp.txt"
+  let output_path = "data/wp_parsed.txt"
+  let content = read(from: file_path)
+  case content {
+    Ok(text) -> {
+      let splitted_text = string.split(text, on: "\n")
+      let parsed = parse_lines(splitted_text, [])
+      let output = print_lines(parsed)
+      let _ = output |> write(to: output_path)
+      io.println("Parsed content written to " <> output_path)
+    }
+    Error(_) -> io.println("Error while reading input file")
+  }
 }
