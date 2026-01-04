@@ -35,3 +35,8 @@ Further documentation can be found at <https://hexdocs.pm/wp_json>.
 gleam run   # Run the project
 gleam test  # Run the tests
 ```
+
+## Known issues
+
+- Empty lines are failing
+- Missing some error handling
